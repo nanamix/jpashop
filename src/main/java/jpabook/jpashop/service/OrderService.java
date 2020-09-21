@@ -50,7 +50,7 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Long orderId){
         //주문엔터티 조회
-        Order order = orderRepository.finedOne(orderId);
+        Order order = orderRepository.findOne(orderId);
         //주문취소
         order.cancel();
 
