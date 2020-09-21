@@ -35,6 +35,8 @@ public class OrderItem {
         getItem().addStock(count);
     }
 
+    //조회로직
+    //주문상품전체가격조회
     public int getTotalPrice() {
         return getOrderPrice() * getCount();
     }
