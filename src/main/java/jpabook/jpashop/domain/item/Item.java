@@ -24,7 +24,7 @@ public abstract class Item {
 
     private int price;
 
-    private int stockQunantity;
+    private int stockQuantity;
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
@@ -38,7 +38,7 @@ public abstract class Item {
     //도메인주도설계
     //엔티티안에 비즈니스설계를 넣어야
     public void addStock(int quantity){
-        this.stockQunantity += quantity;
+        this.stockQuantity += quantity;
     }
 
     /**
@@ -46,10 +46,10 @@ public abstract class Item {
      * @param quantity 
      */
     public void removeStock(int quantity){
-        int restStock = this.stockQunantity - quantity;
+        int restStock = this.stockQuantity - quantity;
         if(restStock < 0) {
             throw new NotEnoughStockException("Need More Stock");
         }
-        this.stockQunantity = restStock;
+        this.stockQuantity = restStock;
     }
 }
