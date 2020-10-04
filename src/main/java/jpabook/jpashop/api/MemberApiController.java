@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,9 +80,32 @@ public class MemberApiController {
         private String name;
     }
 
+    /*응답값으로 엔티티를 직접 외부에 노출*/
     @GetMapping("/api/v1/members")
     public List<Member> membersV1(){
         return memberService.findMembers();
     }
+
+    @GetMapping("/api/v2/members")
+    public Result membersV2(){
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> collect = findMembers.stream()
+                .map(ms -> new MemberDto(ms.getName()))
+                .collect(Collectors.toList());
+        return new Result(collect);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto{
+        private String name;
+    }
+
 
 }
