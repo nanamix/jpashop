@@ -56,7 +56,8 @@ public class OrderApiController {
         private LocalDateTime orderDate;
         private OrderStatus orderStatus;
         private Address address;
-        private List<OrderItem> orderItems;
+        //private List<OrderItem> orderItems;
+        private List<OrderItemDto> orderItems;
 
         public OrderDto(Order order) {
             orderId = order.getId();
@@ -64,8 +65,38 @@ public class OrderApiController {
             orderDate = order.getOrderDate();
             orderStatus = order.getStatus();
             address = order.getDelivery().getAddress();
-            order.getOrderItems().stream().forEach(o -> o.getItem().getName());
-            orderItems = order.getOrderItems();
+            /*order.getOrderItems().stream().forEach(o -> o.getItem().getName());
+            orderItems = order.getOrderItems();*/
+            orderItems = order.getOrderItems().stream().map(orderItem -> new OrderItemDto(orderItem))
+                    .collect(Collectors.toList());
         }
+    }
+
+    @Getter
+    static class OrderItemDto{
+
+        private String itemName; //상품명
+        private int orderPrice;//주문가격
+        private int count;//주문수량
+
+        public OrderItemDto(OrderItem orderItem) {
+            itemName = orderItem.getItem().getName();
+            orderPrice = orderItem.getItem().getPrice();
+            count = orderItem.getCount();
+        }
+    }
+
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3(){
+        List<Order> orders = orderRepository.findAllWithItem();
+
+        for (Order order : orders) {
+           System.out.println("order ref = " + order + " id = " + order.getId());
+
+        }
+
+        List<OrderDto> result = orders.stream().map(o -> new OrderDto(o)).collect(Collectors.toList());
+
+        return result;
     }
 }
