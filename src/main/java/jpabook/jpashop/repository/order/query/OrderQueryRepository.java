@@ -33,7 +33,7 @@ public class OrderQueryRepository {
                         " where oi.order.id = :orderId ", OrderItemQueryDto.class)
                 .setParameter("orderId", orderId).getResultList();
 
-        );
+
     }
 
     private List<OrderQueryDto> findOrders() {
